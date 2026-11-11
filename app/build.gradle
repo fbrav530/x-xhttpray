@@ -63,6 +63,10 @@ android {
 }
 
 dependencies {
-    // gomobile bind 产出的 tunnel.aar（CI 里先生成，再拷进 app/libs/）
+    // gomobile bind 产出的 tunnel.aar（在仓库根 libs/）
     implementation fileTree(dir: '../libs', include: ['*.jar', '*.aar'])
+
+    // TProxyService 使用 android.app.NotificationCompat 的 AndroidX 版本
+    // (androidx.core.app.NotificationCompat)，必须显式声明。
+    implementation 'androidx.core:core:1.13.1'
 }

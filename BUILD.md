@@ -124,6 +124,8 @@ apksigner sign --ks my.jks --ks-key-alias mykey --out app-signed.apk app-aligned
 | `package github.com/xtaci/smux is not in std` | 漏了源码依赖 | 已补 `go get github.com/xtaci/smux@latest` |
 | `Failed to find package 'tools'` | `android-actions/setup-android@v3` 自行安装已废弃的 `tools` 包 | 已移除该 action，改用 runner 预装 SDK |
 | `sdkmanager not found` | SDK 路径未识别 | 脚本会在常见路径查找并打印目录 |
+| `Plugin [id: 'com.android.application'] was not found` | `settings.gradle` 缺 `pluginManagement.repositories`，AGP 不在 Plugin Portal | 已加 `google()` 等仓库 |
+| `Could not find androidx.core:core` | `android.useAndroidX=false` 且未声明依赖 | 已改 `useAndroidX=true` 并添加 `androidx.core:core:1.13.1` |
 
 ## 七、说明
 

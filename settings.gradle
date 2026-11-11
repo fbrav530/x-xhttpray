@@ -1,3 +1,23 @@
+// 插件仓库必须先声明：AGP (com.android.application) 只发布在 google()，
+// 不在 Gradle Plugin Portal。缺这一段会报
+// "Plugin [id: 'com.android.application'] was not found"。
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+// 依赖仓库（aar/jar 解析用）
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
 rootProject.name = "x-tunnel-android"
 
 // 标准两模块布局：:app 使用 app/ 作为模块目录，
