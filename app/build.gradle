@@ -1,0 +1,68 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.x.tunnel'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.x.tunnel"
+        // 与 src/main/jni/Application.mk 的 APP_PLATFORM(android-29) 对齐
+        minSdk 29
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+
+        // 与 src/main/jni/Application.mk 的 APP_ABI 一致
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a'
+        }
+    }
+
+    // 源码在仓库根目录的 src/main，不在 app/src/main，
+    // 这里显式指过去，既有文件一个都不移动。
+    sourceSets {
+        main {
+            manifest.srcFile '../src/main/AndroidManifest.xml'
+            java.srcDirs = ['../src/main/java']
+            res.srcDirs = ['../src/main/res']
+            assets.srcDirs = ['../src/main/assets']
+            jniLibs.srcDirs = ['../libs']   // gomobile 产物在仓库根 libs/
+        }
+    }
+
+    // 用 ndk-build 编 libhev-socks5-tunnel.so（工程自带 Android.mk / Application.mk）
+    externalNativeBuild {
+        ndkBuild {
+            path file('../src/main/jni/Android.mk')
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            // 产物为未签名 APK
+            signingConfig null
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    jniLibs {
+        useLegacyPackaging = true
+    }
+
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+}
+
+dependencies {
+    // gomobile bind 产出的 tunnel.aar（CI 里先生成，再拷进 app/libs/）
+    implementation fileTree(dir: '../libs', include: ['*.jar', '*.aar'])
+}

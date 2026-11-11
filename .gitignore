@@ -1,0 +1,28 @@
+# Go：go.mod / go.sum 需要提交，保证依赖可复现
+/libs/
+
+# Gradle / Android
+.gradle/
+build/
+app/build/
+local.properties
+*.iml
+.idea/
+captures/
+.externalNativeBuild/
+.cxx/
+
+# 产物
+*.apk
+*.aab
+
+# 注意：src/main/jni 下可能有预编译 .so，不要用通配符忽略
+*.so
+!src/main/jni/**/*.so
+
+# 备份
+*.bak
+*.orig
+
+# 系统
+.DS_Store

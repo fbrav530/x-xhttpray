@@ -1,0 +1,5 @@
+rootProject.name = "x-tunnel-android"
+
+// 标准两模块布局：:app 使用 app/ 作为模块目录，
+// 但源码仍指向仓库根下的 src/main（不移动任何既有文件）。
+include ':app'
