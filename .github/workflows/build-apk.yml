@@ -23,30 +23,44 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v5
         with:
-          go-version: '1.22'
+          go-version: '1.24'
           cache: false
 
       # ---------- 1. gomobile：xtunnel.go -> libs/tunnel.aar ----------
+      - name: Init Go module
+        run: |
+          set -euo pipefail
+          if [ ! -f go.mod ]; then
+            go mod init com.x.tunnel
+          fi
+          # 源码实际 import 的第三方包（见 *.go）
+          go get github.com/google/uuid@latest
+          go get github.com/xtaci/smux@latest
+          # 先 tidy 业务依赖，再记录 gomobile 的 tool directive。
+          # 顺序很关键：若先加 tool 再 tidy，tidy 会把它当成未使用而移除。
+          go mod tidy
+
+          # 新版 gomobile 要求 golang.org/x/mobile 出现在模块依赖图中，
+          # 仅 go install 不够。tool directive 会写入 go.mod 并保持。
+          go get -tool golang.org/x/mobile/cmd/gomobile
+          go get -tool golang.org/x/mobile/cmd/gobind
+
+          echo "=== go.mod ==="
+          cat go.mod
+
       - name: Install gomobile
         run: |
-          go install golang.org/x/mobile/cmd/gomobile@latest
-          go install golang.org/x/mobile/cmd/gobind@latest
+          set -euo pipefail
+          go install golang.org/x/mobile/cmd/gomobile
+          go install golang.org/x/mobile/cmd/gobind
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
+          "$(go env GOPATH)/bin/gomobile" version || true
 
       - name: Build tunnel.aar
         run: |
           set -euo pipefail
           export PATH="$(go env GOPATH)/bin:$PATH"
           mkdir -p libs
-
-          if [ ! -f go.mod ]; then
-            # 模块名用 com.x.tunnel，配合下面的 -javapkg 生成
-            # com.x.tunnel.tunnel.Tunnel，与 Java import 一致
-            go mod init com.x.tunnel
-          fi
-          go get github.com/google/uuid@latest
-          go get github.com/gorilla/websocket@latest
-          go mod tidy
 
           gomobile init
 

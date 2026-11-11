@@ -119,6 +119,9 @@ apksigner sign --ks my.jks --ks-key-alias mykey --out app-signed.apk app-aligned
 | APK 里没有 `libhev-*.so` | ndk-build 没跑 | 看 `externalNativeBuild` 日志 |
 | 装上后连接失败 | ECH DNS 被挡 | 界面上勾「禁用 ECH」 |
 | `undefined: ECHPool.ctx` | 用了旧版 xtunnel.go | 用当前这版 |
+| `gomobile bind requires golang.org/x/mobile in the current module` | 新版 gomobile 要求该依赖进入模块依赖图，仅 `go install` 不够 | workflow 里用 `go get -tool` 记录到 go.mod（已修） |
+| `go get -tool` 报 unknown flag | Go 版本 < 1.24 | workflow 已固定 `go-version: '1.24'` |
+| `package github.com/xtaci/smux is not in std` | 漏了源码依赖 | 已补 `go get github.com/xtaci/smux@latest` |
 
 ## 七、说明
 
