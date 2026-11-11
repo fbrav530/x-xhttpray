@@ -24,11 +24,12 @@ android {
     // 这里显式指过去，既有文件一个都不移动。
     sourceSets {
         main {
-            manifest.srcFile '../src/main/AndroidManifest.xml'
+            // AGP 8：manifest.srcFile 是赋值而非方法调用
+            manifest.srcFile = '../src/main/AndroidManifest.xml'
             java.srcDirs = ['../src/main/java']
             res.srcDirs = ['../src/main/res']
             assets.srcDirs = ['../src/main/assets']
-            jniLibs.srcDirs = ['../libs']   // gomobile 产物在仓库根 libs/
+            // AAR 里的 .so 由 AGP 自动合并，不需要也不应该指向 libs/
         }
     }
 
@@ -52,8 +53,11 @@ android {
         targetCompatibility JavaVersion.VERSION_17
     }
 
-    jniLibs {
-        useLegacyPackaging = true
+    // AGP 8.x：useLegacyPackaging 属于 packaging.jniLibs，不能直接写在 android 下
+    packaging {
+        jniLibs {
+            useLegacyPackaging = true
+        }
     }
 
     lint {

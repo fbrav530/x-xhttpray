@@ -126,6 +126,7 @@ apksigner sign --ks my.jks --ks-key-alias mykey --out app-signed.apk app-aligned
 | `sdkmanager not found` | SDK 路径未识别 | 脚本会在常见路径查找并打印目录 |
 | `Plugin [id: 'com.android.application'] was not found` | `settings.gradle` 缺 `pluginManagement.repositories`，AGP 不在 Plugin Portal | 已加 `google()` 等仓库 |
 | `Could not find androidx.core:core` | `android.useAndroidX=false` 且未声明依赖 | 已改 `useAndroidX=true` 并添加 `androidx.core:core:1.13.1` |
+| `Could not find method jniLibs()` | AGP 8 中 `useLegacyPackaging` 必须放在 `packaging { jniLibs {} }` 内 | 已改嵌套结构 |
 
 ## 七、说明
 
