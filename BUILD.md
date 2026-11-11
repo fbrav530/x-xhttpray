@@ -122,6 +122,8 @@ apksigner sign --ks my.jks --ks-key-alias mykey --out app-signed.apk app-aligned
 | `gomobile bind requires golang.org/x/mobile in the current module` | 新版 gomobile 要求该依赖进入模块依赖图，仅 `go install` 不够 | workflow 里用 `go get -tool` 记录到 go.mod（已修） |
 | `go get -tool` 报 unknown flag | Go 版本 < 1.24 | workflow 已固定 `go-version: '1.24'` |
 | `package github.com/xtaci/smux is not in std` | 漏了源码依赖 | 已补 `go get github.com/xtaci/smux@latest` |
+| `Failed to find package 'tools'` | `android-actions/setup-android@v3` 自行安装已废弃的 `tools` 包 | 已移除该 action，改用 runner 预装 SDK |
+| `sdkmanager not found` | SDK 路径未识别 | 脚本会在常见路径查找并打印目录 |
 
 ## 七、说明
 
